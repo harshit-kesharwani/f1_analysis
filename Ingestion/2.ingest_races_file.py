@@ -16,7 +16,7 @@ file_date=dbutils.widgets.get("file_date")#Here we have difned a variable name v
 # COMMAND ----------
 
 #This will read and create a dataframe , consider the header using options(header=True) and inferning schem, by schema(vaules)
-#races_df=spark.read.options(header=True, inferSchema=True).csv('dbfs:/mnt/finaldatabricks/raw/races.csv') 
+#races_df=spark.read.options(header=True, inferSchema=True).csv(    ) 
 # #This reads the schema automatically but may take time in the case of big data sets)
 races_df=spark.read.options(header=True).schema("raceID INT,year INT, round INT, circuitID INT,name STRING, date DATE,time STRING, url STRING").csv(f'dbfs:/mnt/finaldatabricks/raw/{file_date}/races.csv')
 races_df.printSchema()
@@ -61,3 +61,7 @@ display(df)
 # COMMAND ----------
 
 dbutils.notebook.exit("Success")
+
+# COMMAND ----------
+
+
