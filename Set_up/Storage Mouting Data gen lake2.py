@@ -41,13 +41,13 @@ dbutils.secrets.list('formula1project2')
 
 # COMMAND ----------
 
-display(mount_datalake('finaldatabricks','processed'))
+display(mount_datalake('finaldatabricks','presentation'))
 
 # COMMAND ----------
 
 # MAGIC %fs
 # MAGIC ls 
-# MAGIC dbfs:/mnt/finaldatabricks/processed/
+# MAGIC dbfs:/mnt/finaldatabricks/raw/
 
 # COMMAND ----------
 
