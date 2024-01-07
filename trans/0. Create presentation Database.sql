@@ -8,7 +8,11 @@ location "/mnt/finaldatabricks/presentation";
 
 -- COMMAND ----------
 
-desc extended processed.results
+desc extended processed.races
+
+-- COMMAND ----------
+
+
 
 -- COMMAND ----------
 
