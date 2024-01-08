@@ -4,7 +4,14 @@ df=spark.read.format('parquet').load('dbfs:/mnt/finaldatabricks/presentation/rac
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC create schema demp_delta
+# MAGIC drop schema if exists dempdelta cascade;
+# MAGIC create schema dempdelta 
+# MAGIC location 'dbfs:/mnt/finaldatabricks/dempdelta'
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC DESCRIBE DATABASE dempdelta;
 
 # COMMAND ----------
 
@@ -16,12 +23,12 @@ df1=df.select("race_year","race_date","circuit_location","team","grid","race_id"
 
 # COMMAND ----------
 
-df1.write.mode("overwrite").format("delta").option("overwriteSchema", "true").saveAsTable("demp_delta.t1")
+df1.write.mode("overwrite").format("delta").option("overwriteSchema", "true").saveAsTable("dempdelta.t1")
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC select * from demp_delta.t1
+# MAGIC select * from dempdelta.t1
 
 # COMMAND ----------
 
@@ -37,12 +44,12 @@ df2.display()
 
 # COMMAND ----------
 
-df2.write.mode("overwrite").format("delta").option("overwriteschema",True).saveAsTable("demp_delta.t2")
+df2.write.mode("overwrite").format("delta").option("overwriteschema",True).saveAsTable("dempdelta.t2")
 
 # COMMAND ----------
 
 spark.sql(""" 
-merge into demp_delta.t1 a using demp_delta.t2  b on a.grid= b.grid and a.race_id=b.race_id
+merge into dempdelta.t1 a using dempdelta.t2  b on a.grid= b.grid and a.race_id=b.race_id
 when MATCHED THEN 
 update set a.circuit_location =b.circuit_location
 when not matched then
@@ -51,15 +58,11 @@ insert(race_year,race_date, circuit_location, team,grid, race_id)values(race_yea
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC select * from demp_delta.t1 
+# MAGIC select * from dempdelta.t1 
 
 # COMMAND ----------
 
-df.write.mode("overwrite").format("delta").option("overwriteSchema", "true").partitionBy('race_year').saveAsTable("demp_delta.race_results"
-
-# COMMAND ----------
-
-df.withColumn()
+df.write.mode("overwrite").format("delta").option("overwriteSchema", "true").partitionBy('race_year').saveAsTable("dempdelta.race_results")
 
 # COMMAND ----------
 
@@ -69,22 +72,22 @@ df.withColumn()
 # COMMAND ----------
 
 
-spark.sql("update  demp_delta.race_results set points =20- position")
+spark.sql("update  dempdelta.race_results set points =20- position")
 
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC use demp_delta;
+# MAGIC use dempdelta;
 # MAGIC select * from race_results
 
 # COMMAND ----------
 
-spark.sql("delete from demp_delta.race_results where position>10 or position is  null ")
+spark.sql("delete from dempdelta.race_results where position>10 or position is  null ")
 
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC select * from demp_delta.race_results where position is not  null 
+# MAGIC select * from dempdelta.race_results where position is not  null 
 
 # COMMAND ----------
 
@@ -94,7 +97,43 @@ spark.sql("delete from demp_delta.race_results where position>10 or position is 
 
 # MAGIC %sql
 # MAGIC --using the below sql statement we can check how the table has been partitioned 
-# MAGIC SHOW PARTITIONS demp_delta.race_results
+# MAGIC SHOW PARTITIONS dempdelta.race_results
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC --this command is used to check the historical logs of the delta tables when the table was modified.
+# MAGIC desc History dempdelta.t1
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC --we can check the data present in any of the version of the table using the below command.
+# MAGIC select * from  dempdelta.t1 version as of 0
+
+# COMMAND ----------
+
+#we can also create the dataframe from the previous version of the table.
+df2=spark.sql("""select * from demp_delta.t1 version as of 0""")
+
+# COMMAND ----------
+
+df2.display()
+
+# COMMAND ----------
+
+# MAGIC  %sql 
+# MAGIC  VACUUM demp_delta.t1
+# MAGIC  --This command is use to delete the history of the table greater than 7 days
+
+# COMMAND ----------
+
+# MAGIC  %sql 
+# MAGIC  VACUUM demp_delta.t1 RETAIN 0 HOURS
+
+# COMMAND ----------
+
+spark.databricks.delta.retentionDurationCheck.enabled = false
 
 # COMMAND ----------
 

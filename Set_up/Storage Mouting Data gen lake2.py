@@ -41,7 +41,7 @@ dbutils.secrets.list('formula1project2')
 
 # COMMAND ----------
 
-display(mount_datalake('finaldatabricks','presentation'))
+display(mount_datalake('finaldatabricks','dempdelta'))
 
 # COMMAND ----------
 
