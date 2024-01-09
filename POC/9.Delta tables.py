@@ -130,10 +130,24 @@ df2.display()
 
 # MAGIC  %sql 
 # MAGIC  VACUUM demp_delta.t1 RETAIN 0 HOURS
+# MAGIC  --Here we are changing the hour 0 to decrease the retention  time.
 
 # COMMAND ----------
 
 spark.databricks.delta.retentionDurationCheck.enabled = false
+#here we have done this as  per the recommendation after running the above cell
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC --we can convert parquet to delta using the below statement
+# MAGIC convert to delta demp_delta.t1
+# MAGIC --Please note that the table written above is already in parquet format.
+
+# COMMAND ----------
+
+#Managed table will delete the data in s3 also if we delete the table
+#External table will not delete the table even if we delete the table
 
 # COMMAND ----------
 
