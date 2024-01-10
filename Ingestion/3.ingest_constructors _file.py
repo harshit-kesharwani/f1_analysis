@@ -39,11 +39,11 @@ display(final_df)
 # COMMAND ----------
 
 
-final_df.write.mode("overwrite").format("parquet").saveAsTable("processed.constructors") #("/mnt/finaldatabricks/processed/constructors")
+final_df.write.mode("overwrite").format("delta").saveAsTable("processed.constructors") #("/mnt/finaldatabricks/processed/constructors")
 
 # COMMAND ----------
 
-df=spark.read.parquet("/mnt/finaldatabricks/processed/constructors").show()
+df=spark.read.delta("/mnt/finaldatabricks/processed/constructors").show()
 
 # COMMAND ----------
 

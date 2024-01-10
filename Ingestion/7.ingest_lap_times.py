@@ -44,11 +44,13 @@ display(final_df)
 # COMMAND ----------
 
 #Full load + inrimental writting
-write_data(final_df,"processed","lap_times",'race_id')
+#The connection logics are calculated with the table from ergast.com/docs/f1db_user_guide.txt
+merge_condition="src.race_id=tgt.race_id and src.driver_id=tgt.driver_id and tgt.lap=src.lap"
+write_data(final_df,"processed", "lap_times",merge_condition, 'race_id')
 
 # COMMAND ----------
 
-display(spark.read.parquet("/mnt/finaldatabricks/processed/lap_times"))
+display(spark.read.format("delta").("/mnt/finaldatabricks/processed/lap_times"))
 
 # COMMAND ----------
 

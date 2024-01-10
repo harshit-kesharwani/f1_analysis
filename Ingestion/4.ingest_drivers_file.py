@@ -42,12 +42,12 @@ display(final_df)
 
 # COMMAND ----------
 
-#final_df.write.parquet("/mnt/finaldatabricks/processed/drivers","overwrite")
-final_df.write.mode("overwrite").format("parquet").saveAsTable("processed.drivers")
+#final_df.write.delta("/mnt/finaldatabricks/processed/drivers","overwrite")
+final_df.write.mode("overwrite").format("delta").saveAsTable("processed.drivers")
 
 # COMMAND ----------
 
-display(spark.read.parquet("/mnt/finaldatabricks/processed/drivers"))
+display(spark.read.delta("/mnt/finaldatabricks/processed/drivers"))
 
 # COMMAND ----------
 

@@ -50,10 +50,22 @@ display(final_df)
 
 # COMMAND ----------
 
-#Full load + inrimental writting
-write_data(final_df,"processed","results",'race_id')
+# This is  pyspark version of data writing
+# merge_condition = "tgt.result_id = src.result_id AND tgt.race_id = src.race_id"
+# merge_delta_data1(final_df, 'processed', 'results',"/mnt/finaldatabricks/processed/",merge_condition, 'race_id')
+
+# COMMAND ----------
+
+#This method uses the sql function to write the temp views.
+merge_condition = "tgt.result_id = src.result_id AND tgt.race_id = src.race_id"
+write_data(final_df, 'processed', 'results',merge_condition, 'race_id')
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC select * from  processed.results
+# MAGIC select count(*) from  processed.results
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC describe processed.results

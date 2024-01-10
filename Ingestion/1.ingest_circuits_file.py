@@ -181,14 +181,14 @@ display(test_df)
 
 # COMMAND ----------
 
-#Here we are writting thr content to the proccessed container in parquet file format, here we have given the parameter as overwrite because it may give error when we already have the file created, so it will overwrite we run the notebook again. Please note here circuits is a folder, the file is circuited with multiple files inside this folder.
-#final_df.write.parquet("/mnt/finaldatabricks/processed/circuits","overwrite")
+#Here we are writting thr content to the proccessed container in delta file format, here we have given the parameter as overwrite because it may give error when we already have the file created, so it will overwrite we run the notebook again. Please note here circuits is a folder, the file is circuited with multiple files inside this folder.
+#final_df.write.delta("/mnt/finaldatabricks/processed/circuits","overwrite")
 #The below method is use wo write the date as well as infer the schema to hivemeta store
-final_df.write.mode("overwrite").format("parquet").saveAsTable("processed.circuits")
+final_df.write.mode("overwrite").format("delta").saveAsTable("processed.circuits")
 
 # COMMAND ----------
 
-display(spark.read.parquet(f"{processed_path}/circuits"))
+display(spark.read.delta(f"{processed_path}/circuits"))
 
 # COMMAND ----------
 

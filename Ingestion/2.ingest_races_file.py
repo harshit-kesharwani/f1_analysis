@@ -51,11 +51,11 @@ display(final_df2)
 
 # COMMAND ----------
 
-final_df.write.mode("overwrite").partitionBy("race_year").format("parquet").saveAsTable("processed.races")
+final_df.write.mode("overwrite").partitionBy("race_year").format("delta").saveAsTable("processed.races")
 
 # COMMAND ----------
 
-df=spark.read.parquet("/mnt/finaldatabricks/processed/races")
+df=spark.read.delta("/mnt/finaldatabricks/processed/races")
 display(df)
 
 # COMMAND ----------
