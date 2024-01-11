@@ -43,12 +43,17 @@ display(final_df)
 
 # COMMAND ----------
 
-#Full load + inrimental writting
-write_data(final_df,"processed","qualifying",'race_id')
+# #Full load + inrimental writting
+# write_data(final_df,"processed","qualifying",'race_id')
 
 # COMMAND ----------
 
-display(spark.read.parquet("/mnt/finaldatabricks/processed/qualifying"))
+merge_condition="src.qualify_id=tgt.qualify_id and src.race_id=tgt.race_id"
+write_data(final_df,"processed", "qualifying",merge_condition, 'race_id')
+
+# COMMAND ----------
+
+display(spark.read.delta("/mnt/finaldatabricks/processed/qualifying"))
 
 # COMMAND ----------
 
