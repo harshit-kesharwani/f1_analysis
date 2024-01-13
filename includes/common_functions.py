@@ -44,6 +44,7 @@ def write_data(df,database_name, table_name,merge_condition, partition_column):
 
 # COMMAND ----------
 
+#spark equivalent of above function, accessing delta tables using pyspark
 def merge_delta_data1(input_df, db_name, table_name, folder_path, merge_condition, partition_column):
   spark.conf.set("spark.databricks.optimizer.dynamicPartitionPruning","true")
 
