@@ -27,6 +27,7 @@ display(ingest_df)
 # COMMAND ----------
 
 final_df=ingest_df.withColumnsRenamed({'resultID':'result_id','raceId':'race_id','driverId':'driver_id','constructorId':'constrcutor_id','positionText':'postion_text','positionOrder':'postion_order',"fastestLap":"fastest_lap","fastestLapTime":"fastest_lap_time","fastestLapSpeed":"fastest_lap_speed"}).withColumn("ingestion_date",current_timestamp()).drop('url').withColumn("file_date",lit(file_date))
+final_df=final_df.dropDuplicates(['race_id','driver_id'])
 display(final_df)
 
 # COMMAND ----------
@@ -64,8 +65,24 @@ write_data(final_df, 'processed', 'results',merge_condition, 'race_id')
 
 # MAGIC %sql
 # MAGIC select count(*) from  processed.results
+# MAGIC --24960
 
 # COMMAND ----------
 
 # MAGIC %sql 
 # MAGIC describe processed.results
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select race_id, driver_id, count(*) as cnt
+# MAGIC from processed.results  group by race_id, driver_id  having count(*)>1
+# MAGIC order by cnt desc
+
+# COMMAND ----------
+
+
+
+# COMMAND ----------
+
+
