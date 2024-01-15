@@ -16,7 +16,7 @@ from pyspark.sql.functions import current_timestamp
 
 # COMMAND ----------
 
-circuits_df=spark.read.parquet(f"{processed_path}/circuits").withColumnsRenamed({"location":"circuit_location"})
+circuits_df=spark.read.format('delta').load(f"{processed_path}/circuits").withColumnsRenamed({"location":"circuit_location"})
 
 # COMMAND ----------
 
@@ -111,6 +111,15 @@ dbutils.notebook.exit("The presentation layer data is completed")
 # COMMAND ----------
 
 
+
+# COMMAND ----------
+
+print("Hello world")
+
+# COMMAND ----------
+
+# MAGIC %fs 
+# MAGIC ls '/mnt/finaldatabricks/processed/'
 
 # COMMAND ----------
 

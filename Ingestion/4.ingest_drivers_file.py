@@ -47,7 +47,7 @@ final_df.write.mode("overwrite").format("delta").saveAsTable("processed.drivers"
 
 # COMMAND ----------
 
-display(spark.read.delta("/mnt/finaldatabricks/processed/drivers"))
+display(spark.read.format('delta').load("/mnt/finaldatabricks/processed/drivers"))
 
 # COMMAND ----------
 

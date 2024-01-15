@@ -43,7 +43,7 @@ final_df.write.mode("overwrite").format("delta").saveAsTable("processed.construc
 
 # COMMAND ----------
 
-df=spark.read.delta("/mnt/finaldatabricks/processed/constructors").show()
+df=spark.read.format('delta').load("/mnt/finaldatabricks/processed/constructors").show()
 
 # COMMAND ----------
 

@@ -50,7 +50,7 @@ write_data(final_df,"processed", "lap_times",merge_condition, 'race_id')
 
 # COMMAND ----------
 
-display(spark.read.format("delta").("/mnt/finaldatabricks/processed/lap_times"))
+display(spark.read.format("delta").load("/mnt/finaldatabricks/processed/lap_times"))
 
 # COMMAND ----------
 

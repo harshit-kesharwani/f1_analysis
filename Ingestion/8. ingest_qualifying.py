@@ -53,7 +53,7 @@ write_data(final_df,"processed", "qualifying",merge_condition, 'race_id')
 
 # COMMAND ----------
 
-display(spark.read.delta("/mnt/finaldatabricks/processed/qualifying"))
+display(spark.read.format('delta').load("/mnt/finaldatabricks/processed/qualifying"))
 
 # COMMAND ----------
 

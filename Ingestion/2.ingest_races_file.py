@@ -55,7 +55,7 @@ final_df.write.mode("overwrite").partitionBy("race_year").format("delta").saveAs
 
 # COMMAND ----------
 
-df=spark.read.delta("/mnt/finaldatabricks/processed/races")
+df=spark.read.format('delta').load("/mnt/finaldatabricks/processed/races")
 display(df)
 
 # COMMAND ----------

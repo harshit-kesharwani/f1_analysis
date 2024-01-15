@@ -188,7 +188,7 @@ final_df.write.mode("overwrite").format("delta").saveAsTable("processed.circuits
 
 # COMMAND ----------
 
-display(spark.read.delta(f"{processed_path}/circuits"))
+display(spark.read.format('delta').load(f"{processed_path}/circuits"))
 
 # COMMAND ----------
 

@@ -51,7 +51,7 @@ write_data(final_df,"processed","pit_stops",merge_condition, "race_id")
 
 # COMMAND ----------
 
-display(spark.read.parquet("/mnt/finaldatabricks/processed/pit_stops"))
+display(spark.read.format('delta').load("/mnt/finaldatabricks/processed/pit_stops"))
 
 # COMMAND ----------
 
