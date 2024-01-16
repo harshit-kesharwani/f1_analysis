@@ -26,7 +26,7 @@ display(df_qualify)
 
 # COMMAND ----------
 
-final_df=df_qualify.withColumnsRenamed({"qualifyId":'qaulify_id','raceId':'race_id','driverId':'driver_id','constructorId':'constructor_id'}).withColumn("ingestion_date",current_timestamp()).withColumn("file_date",lit(file_date))
+final_df=df_qualify.withColumnsRenamed({"qualifyId":'qualify_id','raceId':'race_id','driverId':'driver_id','constructorId':'constructor_id'}).withColumn("ingestion_date",current_timestamp()).withColumn("file_date",lit(file_date))
 display(final_df)
 
 # COMMAND ----------
@@ -48,7 +48,11 @@ display(final_df)
 
 # COMMAND ----------
 
-merge_condition="src.qualify_id=tgt.qualify_id and src.race_id=tgt.race_id"
+display(final_df)
+
+# COMMAND ----------
+
+merge_condition = "tgt.qualify_id = src.qualify_id AND tgt.race_id = src.race_id"
 write_data(final_df,"processed", "qualifying",merge_condition, 'race_id')
 
 # COMMAND ----------

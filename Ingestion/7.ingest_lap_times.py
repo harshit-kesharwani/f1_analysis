@@ -55,3 +55,7 @@ display(spark.read.format("delta").load("/mnt/finaldatabricks/processed/lap_time
 # COMMAND ----------
 
 dbutils.notebook.exit("Success")
+
+# COMMAND ----------
+
+

@@ -42,7 +42,8 @@ display(final_df)
 # COMMAND ----------
 
 #Full load + inrimental writting
-merge_condition="tgt.result_id=src.result_id and tgt.race_id=src.result_id"
+#merge_condition="tgt.result_id=src.result_id AND tgt.race_id=src.race_id"
+merge_condition = "tgt.race_id = src.race_id AND tgt.driver_id = src.driver_id AND tgt.stop = src.stop"
 write_data(final_df,"processed","pit_stops",merge_condition, "race_id")
 
 # COMMAND ----------
