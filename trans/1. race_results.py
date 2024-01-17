@@ -24,7 +24,7 @@ display(circuits_df)
 
 # COMMAND ----------
 
-races_df=spark.read.parquet(f"{processed_path}/races").withColumnsRenamed({"name":"race_name","race_timestamp":"race_date"})
+races_df=spark.read.format('delta').load(f"{processed_path}/races").withColumnsRenamed({"name":"race_name","race_timestamp":"race_date"})
 
 # COMMAND ----------
 
@@ -32,7 +32,7 @@ display(races_df)
 
 # COMMAND ----------
 
-drivers_df=spark.read.parquet(f"{processed_path}/drivers").withColumnsRenamed({"name":"driver_name","nationality":"driver_nationality","number":"driver_number"})
+drivers_df=spark.read.format('delta').load(f"{processed_path}/drivers").withColumnsRenamed({"name":"driver_name","nationality":"driver_nationality","number":"driver_number"})
 
 # COMMAND ----------
 
@@ -40,7 +40,7 @@ display(drivers_df)
 
 # COMMAND ----------
 
-constructors_df=spark.read.parquet(f"{processed_path}/constructors").withColumnRenamed("name","team")
+constructors_df=spark.read.format('delta').load(f"{processed_path}/constructors").withColumnRenamed("name","team")
 
 # COMMAND ----------
 
@@ -48,7 +48,7 @@ display(constructors_df)
 
 # COMMAND ----------
 
-results_df=spark.read.parquet(f"{processed_path}/results").filter(f"file_date='{file_date}'").withColumnsRenamed({"time":"race_time","race_id":"result_race_id","file_date":"result_file_date"})
+results_df=spark.read.format('delta').load(f"{processed_path}/results").filter(f"file_date='{file_date}'").withColumnsRenamed({"time":"race_time","race_id":"result_race_id","file_date":"result_file_date"})
 
 # COMMAND ----------
 
@@ -85,20 +85,22 @@ display(final_df.filter("race_year=2020 and race_name='Abu Dhabi Grand Prix'").o
 # COMMAND ----------
 
 #Full_load + incrimental writting
-write_data(final_df,"presentation","race_results",'race_id')
+#write_data(final_df,"presentation","race_results",'race_id')
+merge_condition = "tgt.driver_name = src.driver_name AND tgt.race_id = src.race_id"
+write_data(final_df, 'presentation', 'race_results',merge_condition, 'race_id')
 
 # COMMAND ----------
 
-display(spark.read.parquet(f"{presentation_path}/race_results"))
+display(spark.read.format('delta').load(f"{presentation_path}/race_results"))
 
 # COMMAND ----------
 
 # MAGIC %sql 
-# MAGIC select race_id, count(1) from presentation.race_results group by race_id
+# MAGIC select distinct file_date from presentation.race_results
 
 # COMMAND ----------
 
-test=spark.read.parquet(f"{presentation_path}/race_results")
+test=spark.read.format('delta').load(f"{presentation_path}/race_results")
 
 # COMMAND ----------
 
@@ -110,16 +112,8 @@ dbutils.notebook.exit("The presentation layer data is completed")
 
 # COMMAND ----------
 
-
-
-# COMMAND ----------
-
-print("Hello world")
-
-# COMMAND ----------
-
-# MAGIC %fs 
-# MAGIC ls '/mnt/finaldatabricks/processed/'
+# MAGIC %sql
+# MAGIC select * from presentation.race_results where race_year=2020
 
 # COMMAND ----------
 

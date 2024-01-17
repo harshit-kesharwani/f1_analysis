@@ -3,7 +3,7 @@ v_result=dbutils.notebook.run("9.create_processed_database",0)
 
 # COMMAND ----------
 
-v_result=dbutils.notebook.run("1.ingest_circuits_file",0,{"p_date_source":"Ergast API","file_date":'2021-03-28'})
+v_result=dbutils.notebook.run("1.ingest_circuits_file",0,{"p_date_source":"Ergast API","file_date":'2021-04-18'})
 
 # COMMAND ----------
 
@@ -11,7 +11,7 @@ v_result
 
 # COMMAND ----------
 
-v_result=dbutils.notebook.run("2.ingest_races_file",0,{"p_date_source":"Ergast API","file_date":'2021-03-28'})
+v_result=dbutils.notebook.run("2.ingest_races_file",0,{"p_date_source":"Ergast API","file_date":'2021-04-18'})
 
 # COMMAND ----------
 
@@ -19,7 +19,7 @@ v_result
 
 # COMMAND ----------
 
-v_result=dbutils.notebook.run("3.ingest_constructors _file",0,{"p_date_source":"Ergast API","file_date":'2021-03-28'})
+v_result=dbutils.notebook.run("3.ingest_constructors _file",0,{"p_date_source":"Ergast API","file_date":'2021-04-18'})
 
 # COMMAND ----------
 
@@ -27,7 +27,7 @@ v_result
 
 # COMMAND ----------
 
-v_result=dbutils.notebook.run("4.ingest_drivers_file",0,{"p_date_source":"Ergast API","file_date":'2021-03-28'})
+v_result=dbutils.notebook.run("4.ingest_drivers_file",0,{"p_date_source":"Ergast API","file_date":'2021-04-18'})
 
 # COMMAND ----------
 
@@ -35,7 +35,7 @@ v_result
 
 # COMMAND ----------
 
-v_result=dbutils.notebook.run("5.Ingest_results",0,{"p_date_source":"Ergast API","file_date":'2021-03-28'})
+v_result=dbutils.notebook.run("5.Ingest_results",0,{"p_date_source":"Ergast API","file_date":'2021-04-18'})
 
 # COMMAND ----------
 
@@ -44,7 +44,7 @@ v_result
 
 # COMMAND ----------
 
-v_result=dbutils.notebook.run("6.ingest_pit_stops_file",0,{"p_date_source":"Ergast API","file_date":'2021-03-28'})
+v_result=dbutils.notebook.run("6.ingest_pit_stops_file",0,{"p_date_source":"Ergast API","file_date":'2021-04-18'})
 
 # COMMAND ----------
 
@@ -53,7 +53,7 @@ v_result
 # COMMAND ----------
 
 
-v_result=dbutils.notebook.run("7.ingest_lap_times",0,{"p_date_source":"Ergast API","file_date":'2021-03-28'})
+v_result=dbutils.notebook.run("7.ingest_lap_times",0,{"p_date_source":"Ergast API","file_date":'2021-04-18'})
 
 # COMMAND ----------
 
@@ -61,7 +61,7 @@ v_result
 
 # COMMAND ----------
 
-v_result=dbutils.notebook.run("8. ingest_qualifying",0,{"p_date_source":"Ergast API","file_date":'2021-03-28'})
+v_result=dbutils.notebook.run("8. ingest_qualifying",0,{"p_date_source":"Ergast API","file_date":'2021-04-18'})
 
 # COMMAND ----------
 
@@ -75,7 +75,7 @@ v_result
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC select *  from processed.races
+# MAGIC select distinct file_date  from processed.qualifying
 
 # COMMAND ----------
 

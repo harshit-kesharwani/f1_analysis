@@ -3,6 +3,11 @@ from pyspark.sql.functions import col
 
 # COMMAND ----------
 
+dbutils.widgets.text("file_date","2021-03-21") #here we have created a parameter which will ask you for the paramter and if no parameter is given it will check for the second argument as default parameter, which is blank in this case.
+file_date=dbutils.widgets.get("file_date")#Here we have difned a variable name v_data_source which will take the value of the p_data_source paramter as a variable. 
+
+# COMMAND ----------
+
 # MAGIC %run "../includes/configuration"
 
 # COMMAND ----------
@@ -11,7 +16,7 @@ from pyspark.sql.functions import col
 
 # COMMAND ----------
 
-race_result_df=spark.read.parquet(f"{presentation_path}/race_results")
+race_result_df=spark.read.format('delta').load(f"{presentation_path}/race_results").filter(f"file_date='{file_date}'")
 
 # COMMAND ----------
 
@@ -19,7 +24,7 @@ race_year=df_column_to_list(race_result_df,"race_year")
 
 # COMMAND ----------
 
-race_results_df = spark.read.parquet(f"{presentation_path}/race_results").filter(col("race_year").isin(race_year))
+race_results_df = spark.read.format('delta').load(f"{presentation_path}/race_results").filter(col("race_year").isin(race_year))
 
 # COMMAND ----------
 
@@ -43,7 +48,7 @@ final_df=constructor_standing_df.withColumn("rank",rank().over(constrcutor_rank_
 
 # COMMAND ----------
 
-final_df.filter("race_year=2020").display()
+final_df.display()
 
 # COMMAND ----------
 
@@ -53,11 +58,18 @@ final_df.filter("race_year=2020").display()
 # COMMAND ----------
 
 #Full load + incriemental writting
-write_data(final_df,'presentation',"constructor_standings",'race_year')
+#write_data(final_df,'presentation',"constructor_standings",'race_year')
+merge_condition = "tgt.team = src.team AND tgt.race_year = src.race_year"
+write_data(final_df, 'presentation', 'constructor_standings',merge_condition, 'race_year')
 
 # COMMAND ----------
 
-spark.read.parquet(f"{presentation_path}/constructor_standings").display()
+spark.read.format('delta').load(f"{presentation_path}/constructor_standings").display()
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC select * from presentation.constructor_standings where race_year=2020
 
 # COMMAND ----------
 
