@@ -230,4 +230,8 @@ select name, nationality, dob, rank() over(partition by nationality order by dob
 
 -- COMMAND ----------
 
+--lEARNED A NEW METHOD TO GET THE INFO LIKE IS THE TABLE IS OF MANAGED TYPE OR EXTERNAL, this feature is only available in premium tier databricks 
 
+select * from 
+system.information_schema.tables
+where  table_name ='results'
