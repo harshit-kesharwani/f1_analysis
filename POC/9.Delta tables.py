@@ -140,6 +140,13 @@ spark.databricks.delta.retentionDurationCheck.enabled = false
 # COMMAND ----------
 
 # MAGIC %sql 
+# MAGIC --If we have deleted the latest version of data or we want to restore to previous version, we can simply do it using the below statement.
+# MAGIC restore table demp_delta.t1 to version as of 2
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %sql 
 # MAGIC --we can convert parquet to delta using the below statement
 # MAGIC convert to delta demp_delta.t1
 # MAGIC --Please note that the table written above is already in parquet format.
@@ -151,4 +158,85 @@ spark.databricks.delta.retentionDurationCheck.enabled = false
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC --we can optimize the table by using zorder and optimize command, this will order the file as per the given field.
+# MAGIC optimize demp_delta.t1
+# MAGIC zorder by (employee_id)
 
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC --if we drop the table, then folder will be also deleted.
+# MAGIC -- we can add comment to table with below statement.
+# MAGIC CREATE Table abc
+# MAGIC comment 'hello'
+# MAGIC PARTITIONED BY (city, date_of_birth)
+# MAGIC location 'anc/d/'
+# MAGIC as select ab, cd, ef from users
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC --databricks allow adding constrains to table, there are two types of constrain not null constraints and check constrains.
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC --there are two types of cloning.
+# MAGIC --Deep clone  cloned  meta data + original table data from source.
+# MAGIC -- while in case of shallow command only delta logs are copied.
+# MAGIC --please note that if make any changes on the cloned tables,it will NOT AFFECT THE ORIGINAL TABLES.
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC --There are three types of views in databricks.
+# MAGIC --stored views i.e views are stored in storage and can be created using "create view" statement.
+# MAGIC -- temp views are temporary view that last only till session end, sessions ends when we attach or deattach a notebook restart a cluster or install a new pyton package. created using "create temp view" --temp view can not be accessed outside the notebook. 
+# MAGIC -- Global temporary view are the temp views that last till the cluster does not restarts.  "create global temp view <view_name>".
+# MAGIC -- accessing data for global temp: "select * from global_temp.<view_name>"
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC --Show tables in <database_name> --This command will help to see all the tables, temp, global, views in the database.
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC --we can use wildcard character to read the list of files from a directory.
+# MAGIC --select * from json.'file_path/*.join'
+# MAGIC
+# MAGIC --reading columns from nested json select customer_id, profile:first_name, profile:last_name, profile:address:country
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC   --Here we are applying a filter function to add a new column
+# MAGIC   select order_id, books, filter(books,i->i.quatity>=)as multiple_copies
+# MAGIC   from orders
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC --we can apply specific tranformation to the table
+# MAGIC select 
+# MAGIC order_id, books, tranform(books, bcast(b.sutotal*0.8 as int)) as subtotal
+# MAGIC from orders
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC --Here we are defing the UDF
+# MAGIC create or replace function get_url(email string)
+# MAGIC return string
+# MAGIC return concact("https://www.",split(email ,"@")[1])
+# MAGIC --Above we have defined the udf 
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC --we can use the UDF directly
+# MAGIC select email, get_url(email)as domain
+# MAGIC from customers;
